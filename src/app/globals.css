@@ -1,0 +1,1930 @@
+:root {
+  --vanilla: #fff6e7;
+  --butter: #f7d879;
+  --blush: #f2afc0;
+  --sage: #a8b99b;
+  --cocoa: #80624e;
+  --ink: #493b32;
+  --paper: #fffaf2;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: #fce4ec;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  color: var(--ink);
+  background: #fce4ec;
+  background-image: radial-gradient(#f7c1d1 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+a {
+  color: var(--cocoa);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--cocoa);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--blush);
+  color: var(--ink);
+}
+
+/* Mobile-first Scrapbook Shell */
+.site-shell {
+  width: 100%;
+  max-width: 440px;
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: 68px 12px 20px;
+  background: #fdf0f4;
+  box-shadow: 0 0 46px rgba(224, 133, 161, 0.28);
+  overflow-x: clip;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Top Bookmark Bar — solid warm paper */
+.topbar {
+  position: fixed;
+  z-index: 30;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(min(100vw, 440px) - 24px);
+  max-width: 416px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1.5px solid #f2c7d4;
+  border-radius: 16px;
+  background: var(--paper);
+  box-shadow: 0 4px 0 rgba(214, 115, 143, 0.14);
+}
+
+.sheet-tabs {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sheet-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.sheet-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--cocoa);
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sheet-tab-btn:hover {
+  background: #fde8f0;
+}
+
+.sheet-tab-btn.active {
+  background: var(--butter);
+  color: var(--ink);
+  border-color: rgba(204, 115, 138, 0.35);
+  font-weight: 700;
+}
+
+.music-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1.5px solid rgba(204, 115, 138, 0.3);
+  border-radius: 10px;
+  background: #fff5f8;
+  color: var(--ink);
+  padding: 6px 9px;
+  font-weight: 700;
+  font-size: 11px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Individual Physical Paper Sheet (Per-lembar) */
+.sheet-stage {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-sheet {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0 8px;
+}
+
+.sheet-paper {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  background: var(--paper);
+  border: 1.5px solid #f0c2cf;
+  border-radius: 22px;
+  padding: 20px 16px 24px;
+  box-shadow:
+    0 8px 0 #f5d1dc,
+    0 14px 28px rgba(181, 110, 128, 0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Stacked paper bottom edge illusion */
+.sheet-paper::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -6px;
+  height: 5px;
+  background: #fde2ec;
+  border: 1.5px solid #ebb4c4;
+  border-top: 0;
+  border-radius: 0 0 14px 14px;
+  z-index: -1;
+}
+
+.sheet-header-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1.5px dashed rgba(204, 115, 138, 0.28);
+}
+
+.sheet-page-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cocoa);
+  letter-spacing: 0.02em;
+}
+
+.sheet-corner-stamp {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 17px;
+  font-weight: 700;
+  color: #b56e80;
+  background: #fceef2;
+  border: 1px dashed #dfa3b2;
+  padding: 1px 9px;
+  border-radius: 8px;
+  transform: rotate(2deg);
+}
+
+.back-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid rgba(204, 115, 138, 0.3);
+  background: #fff5f8;
+  color: var(--cocoa);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Beranda Ambient Photo Background */
+.welcome-paper-with-bg {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.welcome-bg-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 22px;
+}
+
+.welcome-bg-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.65;
+  filter: saturate(1.1);
+  transform: scale(1.02);
+}
+
+.welcome-bg-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 245, 249, 0.22) 0%,
+    rgba(254, 230, 238, 0.32) 100%
+  );
+}
+
+/* Sheet 01: Welcome / Hero */
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-inner h1 {
+  font-family: var(--font-playfair), "Playfair Display", serif;
+  font-weight: 700;
+  font-size: clamp(30px, 8vw, 38px);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  margin: 4px 0 10px;
+  color: var(--ink);
+  text-shadow: 0 2px 12px rgba(255, 255, 255, 0.95), 0 0 24px #ffffff;
+}
+
+.hero-inner h1 em {
+  color: #bf7386;
+  font-weight: 600;
+}
+
+.hero-copy {
+  max-width: 340px;
+  margin: 0 auto;
+  color: #523f33;
+  line-height: 1.62;
+  font-size: 13.5px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  padding: 9px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(240, 197, 210, 0.65);
+  box-shadow: 0 4px 14px rgba(181, 110, 128, 0.12);
+}
+
+.canvas-wrap {
+  width: 100%;
+  max-width: 320px;
+  height: 220px;
+  margin: 10px auto 2px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 245, 248, 0.72);
+  backdrop-filter: blur(4px);
+  border-radius: 18px;
+  border: 1.5px dashed #ebb2c3;
+}
+
+.canvas-loading-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 18px;
+  color: var(--cocoa);
+}
+
+.canvas-wrap canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  outline: none;
+}
+
+.character-hint {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 19px;
+  color: var(--cocoa);
+  margin: 6px 0 4px;
+  padding: 3px 14px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  border-radius: 999px;
+  display: inline-block;
+  border: 1px solid rgba(240, 197, 210, 0.55);
+  box-shadow: 0 2px 8px rgba(181, 110, 128, 0.1);
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.primary-button {
+  border: 1.5px solid #5f4636;
+  border-radius: 14px;
+  background: var(--cocoa);
+  color: var(--paper);
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 4px 0 #5f4636;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.primary-button.with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 #5f4636;
+}
+
+.primary-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #5f4636;
+}
+
+/* Interactive Choice Menu ("Pilih Lanjut Kemana") */
+.choice-menu-box {
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1.5px dashed rgba(204, 115, 138, 0.28);
+  text-align: left;
+  position: relative;
+  z-index: 5;
+}
+
+.choice-prompt {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.choice-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.choice-card-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 13px;
+  background: #fff6f9;
+  border: 1.5px solid #f2c7d4;
+  border-radius: 14px;
+  box-shadow: 0 3px 0 #f7d5df;
+  text-align: left;
+  color: var(--ink);
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.choice-card-btn:hover {
+  background: #fce9f0;
+  border-color: #c97d93;
+  transform: translateY(-1px);
+}
+
+.choice-card-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #f7d5df;
+}
+
+.choice-card-btn.subtle {
+  background: #fffafd;
+}
+
+.choice-icon-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: #ffffff;
+  border: 1.5px solid rgba(204, 115, 138, 0.28);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.choice-text-wrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.choice-text-wrap strong {
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.choice-text-wrap small {
+  font-size: 11.5px;
+  color: #7d6757;
+  line-height: 1.35;
+}
+
+.choice-arrow {
+  color: var(--cocoa);
+  flex-shrink: 0;
+}
+
+/* Inner Section Typography */
+.section-inner {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.section-inner h2 {
+  font: 600 clamp(25px, 6.8vw, 32px)/1.12 var(--font-playfair), "Playfair Display", serif;
+  letter-spacing: -0.03em;
+  margin: 4px 0 10px;
+  color: var(--ink);
+}
+
+.section-inner h2 em {
+  color: #bf7386;
+  font-weight: 500;
+}
+
+.section-lead {
+  color: #776354;
+  line-height: 1.65;
+  font-size: 13.5px;
+  margin: 0;
+}
+
+/* Tactile Layered Polaroid Stack (Sheet 02) */
+.photo-stack-stage {
+  position: relative;
+  width: 100%;
+  height: 375px;
+  margin: 22px auto 10px;
+  display: grid;
+  place-items: center;
+  perspective: 1100px;
+  user-select: none;
+}
+
+.polaroid-sheet {
+  position: absolute;
+  width: min(78%, 256px);
+  padding: 11px 11px 15px;
+  background: var(--paper);
+  border-radius: 10px;
+  border: 1.5px solid #f0c5d2;
+  box-shadow:
+    0 10px 24px rgba(181, 110, 128, 0.14),
+    0 2px 5px rgba(181, 110, 128, 0.08);
+  cursor: pointer;
+  transform-origin: center center;
+  transition: box-shadow 0.25s ease, filter 0.25s ease;
+  will-change: transform;
+}
+
+.polaroid-sheet.is-focused {
+  box-shadow:
+    0 24px 48px rgba(160, 80, 105, 0.22),
+    0 6px 16px rgba(160, 80, 105, 0.12);
+  border-color: #c97d93;
+}
+
+.polaroid-sheet.is-behind {
+  filter: brightness(0.96);
+  box-shadow: 0 6px 14px rgba(181, 110, 128, 0.1);
+}
+
+.polaroid-tape {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 66px;
+  height: 19px;
+  background: rgba(247, 216, 121, 0.7);
+  border-left: 1px dashed rgba(181, 110, 128, 0.35);
+  border-right: 1px dashed rgba(181, 110, 128, 0.35);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.polaroid-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3.9;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fdecf2;
+  border: 1px solid rgba(204, 115, 138, 0.2);
+}
+
+.polaroid-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.polaroid-img.is-loaded {
+  opacity: 1;
+}
+
+.polaroid-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 16px;
+  text-align: center;
+  color: #7d5f4c;
+  border: 1px dashed rgba(128, 98, 78, 0.26);
+  border-radius: 6px;
+}
+
+.polaroid-placeholder.variant-0 {
+  background: #f6e3d4;
+}
+
+.polaroid-placeholder.variant-1 {
+  background: #e9eedd;
+}
+
+.polaroid-placeholder.variant-2 {
+  background: #f9e4ea;
+}
+
+.polaroid-date-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid rgba(128, 98, 78, 0.2);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cocoa);
+}
+
+.polaroid-placeholder-note {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #7b604e;
+}
+
+.polaroid-placeholder-note small {
+  opacity: 0.75;
+  font-size: 10px;
+}
+
+.polaroid-footer {
+  padding-top: 9px;
+  text-align: center;
+}
+
+.polaroid-date {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #9c7e69;
+  font-weight: 700;
+}
+
+.memory-caption {
+  font: 600 19px/1.2 var(--font-caveat), "Caveat", cursive;
+  color: var(--ink);
+  margin-top: 3px;
+}
+
+.memory-handnote {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #6e5a4c;
+  background: var(--vanilla);
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin: 6px 0 2px;
+  border: 1px dashed rgba(128, 98, 78, 0.2);
+}
+
+.polaroid-action-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 10.5px;
+  color: #9c7e69;
+}
+
+.photo-stack-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.stack-dot-btn {
+  border: 1px solid #f0c5d2;
+  border-radius: 999px;
+  background: #fff5f8;
+  color: var(--cocoa);
+  padding: 5px 11px;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+
+.stack-dot-btn.active {
+  background: #bf7386;
+  color: #ffffff;
+  border-color: #bf7386;
+}
+
+/* Sheet 03: Envelope & Letter */
+.envelope-card {
+  margin: 22px auto 8px;
+  padding: 28px 18px;
+  background: #fff5f8;
+  border: 1.5px dashed #e8a8b8;
+  border-radius: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.envelope-illustration {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #f0c5d2;
+  display: grid;
+  place-items: center;
+}
+
+.envelope-caption {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 20px;
+  color: var(--cocoa);
+  margin: 0;
+}
+
+.letter {
+  width: 100%;
+  margin: 18px auto 0;
+  padding: 22px 18px;
+  background: #fffbfd;
+  border-radius: 14px;
+  border: 1.5px solid #f0c5d2;
+  position: relative;
+}
+
+.letter-stamp {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px dashed #d59aa8;
+  display: grid;
+  place-items: center;
+  transform: rotate(6deg);
+}
+
+.letter-greeting {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 22px !important;
+  font-weight: 700;
+  color: var(--ink) !important;
+}
+
+.letter p {
+  line-height: 1.78;
+  color: #655244;
+  font-size: 13.5px;
+  margin: 0 0 12px;
+}
+
+.letter-sign {
+  font: 700 22px var(--font-caveat), "Caveat", cursive;
+  color: #b66f80;
+  margin-top: 14px;
+}
+
+.letter-sign-sub {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cocoa);
+}
+
+/* Sheet 04: Love Puzzle Game + Green Screen Fireworks */
+.surprise-inner {
+  text-align: center;
+  position: relative;
+}
+
+.love-puzzle-box {
+  position: relative;
+  margin: 16px auto 4px;
+  padding: 14px;
+  background: #fff5f8;
+  border: 1.5px solid #f0c5d2;
+  border-radius: 18px;
+  z-index: 2;
+}
+
+.puzzle-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.puzzle-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--cocoa);
+  background: #ffffff;
+  border: 1px solid #f0c5d2;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.puzzle-reset-btn {
+  border: 1px solid #bf7386;
+  background: #ffffff;
+  color: #bf7386;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.puzzle-instruction {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #6e5a4c;
+  margin: 0 0 12px;
+}
+
+.puzzle-board {
+  width: 100%;
+  max-width: 244px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 6px;
+  padding: 6px;
+  background: #ffffff;
+  border: 2px dashed #e8b0c0;
+  border-radius: 16px;
+  transition: gap 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
+}
+
+.puzzle-board.is-solved {
+  gap: 0;
+  padding: 4px;
+  border-style: solid;
+  border-color: #d58d9f;
+  box-shadow: 0 10px 24px rgba(191, 115, 134, 0.22);
+}
+
+.puzzle-tile {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1.5px solid #f0c5d2;
+  border-radius: 10px;
+  background: #fff5f8;
+  overflow: hidden;
+  display: block;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.puzzle-board.is-solved .puzzle-tile {
+  border-width: 0;
+  border-radius: 0;
+}
+
+.puzzle-tile.is-selected {
+  border: 2.5px solid var(--cocoa);
+  box-shadow: 0 0 0 3px var(--butter);
+  z-index: 2;
+}
+
+.puzzle-quadrant-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.puzzle-piece-num {
+  position: absolute;
+  bottom: 5px;
+  right: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--cocoa);
+  background: rgba(255, 250, 242, 0.86);
+  padding: 1px 5px;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.puzzle-win-card {
+  position: relative;
+  z-index: 4;
+  margin-top: 14px;
+}
+
+/* Green Screen Chroma-Keyed Fireworks Overlay */
+.fireworks-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fireworks-canvas {
+  width: 100%;
+  max-width: 440px;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.hug-note-card {
+  margin: 16px auto 6px;
+  padding: 18px 15px;
+  background: #fff3f7;
+  border: 1.5px solid #f0c2cf;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.hug-note-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.hug-note-card h3 {
+  font-family: var(--font-playfair), "Playfair Display", serif;
+  font-size: 20px;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.hug-note-card p {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #6e5a4c;
+  margin: 0;
+}
+
+.footer {
+  padding: 16px 12px 4px;
+  text-align: center;
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 17px;
+  color: #a87284;
+}
+
+/* =========================================================
+   JOOX-Style Music Album Player & Vinyl Turntable
+   ========================================================= */
+
+.joox-player-container {
+  position: relative;
+  width: 100%;
+  margin: 16px auto 6px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1.5px solid #f0c5d2;
+  box-shadow: 0 10px 28px rgba(214, 115, 143, 0.16);
+}
+
+/* Ambient Blurred Multi-Photo Background for Album Screen */
+.joox-ambient-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.joox-ambient-layer {
+  position: absolute;
+  inset: -20px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(32px) saturate(1.4);
+  opacity: 0.38;
+  transform: scale(1.15);
+  transition: background-image 0.5s ease;
+}
+
+.joox-ambient-2 {
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+}
+
+.joox-ambient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 245, 249, 0.82) 0%,
+    rgba(253, 236, 243, 0.92) 100%
+  );
+}
+
+.joox-turntable-card {
+  position: relative;
+  z-index: 2;
+  padding: 18px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.joox-header-meta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* Switch between Spotify Big Photo and Retro Vinyl */
+.player-mode-switch {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #f0c5d2;
+  border-radius: 999px;
+  padding: 2.5px;
+  gap: 3px;
+  box-shadow: 0 2px 5px rgba(214, 115, 143, 0.1);
+}
+
+.mode-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3.5px 9px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 700;
+  color: #7b5f6c;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.mode-switch-btn:hover {
+  color: var(--ink);
+  background: rgba(254, 235, 242, 0.7);
+}
+
+.mode-switch-btn.is-active {
+  background: var(--butter);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* 1. SPOTIFY BIG PHOTO ALBUM STAGE */
+.spotify-album-stage {
+  position: relative;
+  width: 100%;
+  max-width: 285px;
+  margin: 6px auto 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Vinyl Record Peeking Out Behind the Big Album Jacket */
+.spotify-vinyl-peek {
+  position: absolute;
+  right: 2px;
+  top: 15px;
+  bottom: 15px;
+  width: 215px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1a1515 0%, #0a0708 100%);
+  border: 3px solid #231c1d;
+  box-shadow: 0 8px 22px rgba(40, 20, 25, 0.35);
+  z-index: 1;
+  transform: translateX(18px);
+  user-select: none;
+  pointer-events: none;
+  animation: joox-spin 16s linear infinite;
+  animation-play-state: paused;
+}
+
+.spotify-vinyl-peek.is-spinning {
+  animation-play-state: running;
+}
+
+.vinyl-center-mini-hole {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f7d879;
+  border: 3px solid #d49a4f;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.vinyl-center-mini-hole::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fdf0f4;
+  border: 1.5px solid #ab7534;
+}
+
+/* Large Spotify Album Cover Card */
+.spotify-album-cover-card {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 250px);
+  aspect-ratio: 1 / 1;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow:
+    0 16px 36px rgba(181, 110, 128, 0.28),
+    0 4px 10px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.spotify-album-cover-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 44px rgba(181, 110, 128, 0.35);
+}
+
+.spotify-album-cover-card.is-playing {
+  box-shadow:
+    0 18px 40px rgba(224, 75, 120, 0.32),
+    0 0 0 3px rgba(247, 216, 121, 0.7);
+}
+
+.spotify-big-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.spotify-cover-gloss {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    transparent 42%,
+    transparent 100%
+  );
+}
+
+.spotify-floating-status {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(30, 20, 25, 0.68);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+}
+
+/* Spotify Style Track Title & Like Button Row */
+.spotify-track-row {
+  width: 100%;
+  max-width: 295px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 4px auto 8px;
+  text-align: left;
+}
+
+.spotify-track-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.spotify-song-title {
+  font-family: var(--font-playfair), "Playfair Display", serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spotify-artist-name {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 16px;
+  color: #b56e80;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.spotify-like-btn {
+  border: none;
+  background: transparent;
+  padding: 4px;
+  cursor: pointer;
+  color: #d195a6;
+  display: grid;
+  place-items: center;
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+
+.spotify-like-btn:hover {
+  transform: scale(1.18);
+}
+
+.spotify-like-btn:active {
+  transform: scale(0.9);
+}
+
+.spotify-heart-icon.is-filled {
+  fill: #e04b78;
+  color: #e04b78;
+}
+
+
+.joox-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cocoa);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #f0c5d2;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.joox-status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8c6070;
+}
+
+.joox-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #cfa8b5;
+}
+
+.joox-dot.is-live {
+  background: #e04b78;
+  box-shadow: 0 0 0 3px rgba(224, 75, 120, 0.25);
+  animation: live-pulse 1.8s infinite;
+}
+
+@keyframes live-pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(224, 75, 120, 0.5); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(224, 75, 120, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(224, 75, 120, 0); }
+}
+
+/* Platter & Deck */
+.joox-deck-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 6px auto 14px;
+  display: grid;
+  place-items: center;
+}
+
+/* Retro Tonearm Stylus Needle */
+.joox-tonearm {
+  position: absolute;
+  top: -8px;
+  right: 6px;
+  width: 50px;
+  height: 100px;
+  z-index: 15;
+  pointer-events: none;
+  transform-origin: 36px 12px;
+  transform: rotate(0deg);
+  transition: transform 0.65s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+
+.joox-tonearm.is-playing {
+  transform: rotate(26deg);
+}
+
+.tonearm-base {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #e6d3ba 0%, #ab8972 100%);
+  border: 1.5px solid #6b5344;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.tonearm-stick {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 4.5px;
+  height: 72px;
+  background: linear-gradient(90deg, #d8d0c8, #96887e);
+  border-radius: 2px;
+  transform: rotate(-12deg);
+}
+
+.tonearm-head {
+  position: absolute;
+  bottom: 12px;
+  left: 10px;
+  width: 13px;
+  height: 20px;
+  background: #3b2c24;
+  border: 1px solid #c9a893;
+  border-radius: 3px;
+  transform: rotate(18deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tonearm-head::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #f7d879;
+}
+
+/* Realistic Grooved Vinyl Record (Piringan Hitam) */
+.joox-vinyl-disc {
+  position: relative;
+  width: 204px;
+  height: 204px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1a1515 0%, #0d0a0b 100%);
+  border: 4px solid #231c1d;
+  box-shadow:
+    0 10px 24px rgba(40, 20, 26, 0.32),
+    0 2px 6px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  user-select: none;
+  animation: joox-spin 16s linear infinite;
+  animation-play-state: paused;
+  transition: transform 0.2s ease;
+}
+
+.joox-vinyl-disc:hover {
+  transform: scale(1.02);
+}
+
+.joox-vinyl-disc.is-spinning {
+  animation-play-state: running;
+}
+
+@keyframes joox-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Vinyl concentric grooves */
+.vinyl-groove-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.vinyl-groove-ring.ring-1 {
+  inset: 12px;
+}
+
+.vinyl-groove-ring.ring-2 {
+  inset: 26px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.vinyl-groove-ring.ring-3 {
+  inset: 42px;
+}
+
+/* Vinyl specular sheen reflection */
+.vinyl-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(
+    from 35deg,
+    transparent 0deg,
+    rgba(255, 255, 255, 0.1) 40deg,
+    transparent 80deg,
+    transparent 180deg,
+    rgba(255, 255, 255, 0.1) 220deg,
+    transparent 260deg
+  );
+  opacity: 0.75;
+}
+
+/* Center Label with User's Photo */
+.vinyl-center-label {
+  position: relative;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  border: 3px solid #f7d879;
+  box-shadow: 0 0 0 2px #d49a4f, 0 4px 10px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  z-index: 5;
+  background: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.vinyl-album-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vinyl-spindle-hole {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fdf0f4;
+  border: 3px solid #d49a4f;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+  z-index: 6;
+}
+
+/* Track Information */
+.joox-track-info {
+  text-align: center;
+  margin: 2px 0 10px;
+  width: 100%;
+}
+
+.joox-song-title {
+  font-family: var(--font-playfair), "Playfair Display", serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px;
+  line-height: 1.25;
+}
+
+.joox-artist-name {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 18px;
+  font-weight: 700;
+  color: #b56e80;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.inline-heart-icon {
+  fill: #f2afc0;
+  color: #b56e80;
+}
+
+.joox-dedication {
+  font-size: 11.5px;
+  color: #7b6254;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Animated Soundwave Equalizer */
+.joox-equalizer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3.5px;
+  height: 18px;
+  margin: 6px auto 10px;
+}
+
+.eq-bar {
+  width: 3.5px;
+  height: 4px;
+  background: #e07593;
+  border-radius: 999px;
+  transition: height 0.2s ease;
+}
+
+.joox-equalizer.is-active .bar-1 {
+  animation: eq-bounce 0.8s ease-in-out infinite alternate;
+}
+.joox-equalizer.is-active .bar-2 {
+  animation: eq-bounce 0.95s ease-in-out 0.15s infinite alternate;
+}
+.joox-equalizer.is-active .bar-3 {
+  animation: eq-bounce 0.75s ease-in-out 0.3s infinite alternate;
+}
+.joox-equalizer.is-active .bar-4 {
+  animation: eq-bounce 0.9s ease-in-out 0.2s infinite alternate;
+}
+.joox-equalizer.is-active .bar-5 {
+  animation: eq-bounce 0.85s ease-in-out 0.35s infinite alternate;
+}
+
+@keyframes eq-bounce {
+  0% { height: 4px; }
+  100% { height: 18px; }
+}
+
+/* Timeline Scrubber */
+.joox-progress-wrap {
+  width: 100%;
+  max-width: 310px;
+  margin: 4px auto 14px;
+}
+
+.joox-timeline-slider {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: #f7d7e1;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+}
+
+.joox-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: #e04b78;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.joox-scrub-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 5;
+  margin: 0;
+}
+
+.joox-time-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+  color: #8c6776;
+  margin-top: 5px;
+}
+
+/* Playback Control Bar */
+.joox-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.joox-btn-secondary {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #f0c5d2;
+  color: var(--cocoa);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 0 #f5d1dc;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.joox-btn-secondary:hover {
+  background: #fdf2f6;
+  transform: translateY(-1px);
+}
+
+.joox-btn-secondary:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #f5d1dc;
+}
+
+.skip-label {
+  font-size: 8px;
+  font-weight: 700;
+  margin-top: -2px;
+}
+
+.joox-btn-play {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e55580 0%, #c43864 100%);
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  box-shadow:
+    0 6px 16px rgba(224, 75, 120, 0.4),
+    0 3px 0 #9e2a4e;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.joox-btn-play:hover {
+  transform: scale(1.04);
+}
+
+.joox-btn-play:active {
+  transform: scale(0.96) translateY(2px);
+  box-shadow: 0 2px 0 #9e2a4e;
+}
+
+.play-icon-offset {
+  margin-left: 3px;
+}
+
+/* Photo Shelf to swap vinyl photo */
+.joox-photo-shelf {
+  width: 100%;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(214, 115, 143, 0.35);
+  text-align: center;
+}
+
+.joox-shelf-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #7b5f6c;
+  margin: 0 0 8px;
+}
+
+.joox-thumbs-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.joox-thumb-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #f0c5d2;
+  padding: 0;
+  background: #ffffff;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.joox-thumb-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.joox-thumb-btn:hover {
+  transform: scale(1.08);
+  border-color: #e04b78;
+}
+
+.joox-thumb-btn.is-active {
+  border-color: #e04b78;
+  box-shadow: 0 0 0 2px rgba(224, 75, 120, 0.4);
+  transform: scale(1.1);
+}
+
+.joox-thumb-num {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 8px;
+  font-weight: 800;
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  padding: 0 3px;
+  border-radius: 4px;
+}
+
+/* =========================================================
+   Letter Section with Romantic Multi-Photo Backgrounds
+   ========================================================= */
+
+.letter-wrapper-with-bg {
+  position: relative;
+  width: 100%;
+  margin-top: 14px;
+  border-radius: 18px;
+  overflow: hidden;
+  padding: 10px 4px;
+}
+
+.letter-photo-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.letter-bg-photo {
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  filter: blur(2px) saturate(1.2);
+  opacity: 0.26;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+}
+
+.letter-bg-photo.photo-left {
+  left: -12px;
+  top: 18px;
+  width: 135px;
+  height: 180px;
+  transform: rotate(-9deg);
+}
+
+.letter-bg-photo.photo-center {
+  left: 50%;
+  top: 48%;
+  transform: translate(-50%, -50%) rotate(2deg);
+  width: 180px;
+  height: 230px;
+  opacity: 0.18;
+}
+
+.letter-bg-photo.photo-right {
+  right: -12px;
+  bottom: 22px;
+  width: 135px;
+  height: 180px;
+  transform: rotate(10deg);
+}
+
+.letter-bg-soft-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 245, 249, 0.76) 0%,
+    rgba(255, 240, 245, 0.88) 100%
+  );
+}
+
+/* Envelope Card with Peeking Polaroid Photos */
+.envelope-card.with-photo-peeks {
+  position: relative;
+  z-index: 2;
+  margin-top: 28px;
+}
+
+.envelope-peeking-photos {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  pointer-events: none;
+}
+
+.peek-photo {
+  width: 58px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 4px 4px 10px;
+  box-shadow: 0 8px 18px rgba(90, 45, 60, 0.22);
+  border: 1px solid #f0c5d2;
+}
+
+.peek-1 {
+  transform: rotate(-13deg);
+}
+
+.peek-2 {
+  transform: rotate(11deg);
+}
+
+/* Letter with watermark background & pinned keepsake polaroid */
+.letter.with-watermark-bg {
+  position: relative;
+  z-index: 2;
+  background-image:
+    linear-gradient(rgba(255, 251, 250, 0.94), rgba(255, 245, 249, 0.96)),
+    url('/images/memory-02.jpg');
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 10px 26px rgba(181, 110, 128, 0.16);
+}
+
+.letter-pinned-polaroid {
+  float: right;
+  width: 90px;
+  margin: 2px 0 12px 14px;
+  padding: 5px 5px 9px;
+  background: #ffffff;
+  border: 1.5px solid #f0c5d2;
+  border-radius: 7px;
+  box-shadow: 0 6px 14px rgba(181, 110, 128, 0.2);
+  transform: rotate(4deg);
+  position: relative;
+  z-index: 3;
+}
+
+.polaroid-tape-mini {
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 36px;
+  height: 12px;
+  background: rgba(247, 216, 121, 0.75);
+  border-left: 1px dashed rgba(181, 110, 128, 0.35);
+  border-right: 1px dashed rgba(181, 110, 128, 0.35);
+}
+
+.letter-pinned-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+.letter-pinned-caption {
+  display: block;
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-size: 11px;
+  text-align: center;
+  color: #80624e;
+  margin-top: 3px;
+  line-height: 1.1;
+}
+
+
+@media (max-width: 360px) {
+  .sheet-tab-btn span {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
