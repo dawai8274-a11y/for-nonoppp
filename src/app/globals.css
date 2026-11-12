@@ -134,16 +134,59 @@ a:focus-visible {
 .music-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  border: 1.5px solid rgba(204, 115, 138, 0.3);
-  border-radius: 10px;
-  background: #fff5f8;
-  color: var(--ink);
-  padding: 6px 9px;
+  gap: 5px;
+  border: 1.5px solid rgba(233, 30, 99, 0.35);
+  border-radius: 999px;
+  background: #fff0f5;
+  color: var(--primary);
+  padding: 6px 12px;
   font-weight: 700;
   font-size: 11px;
   white-space: nowrap;
   flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(233, 30, 99, 0.12);
+  transition: all 0.2s ease;
+}
+
+.music-toggle:hover {
+  transform: translateY(-1px);
+  background: #ffe4ee;
+  border-color: var(--primary);
+}
+
+.music-toggle.is-playing {
+  background: linear-gradient(135deg, #f06292 0%, #e91e63 100%);
+  color: #ffffff;
+  border-color: #e91e63;
+  box-shadow: 0 3px 10px rgba(233, 30, 99, 0.3);
+}
+
+.music-toggle.is-paused {
+  animation: pulse-music-hint 2s infinite ease-in-out;
+}
+
+@keyframes pulse-music-hint {
+  0%, 100% {
+    box-shadow: 0 2px 6px rgba(233, 30, 99, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(233, 30, 99, 0.4);
+    border-color: rgba(233, 30, 99, 0.7);
+  }
+}
+
+.spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Individual Physical Paper Sheet (Per-lembar) */

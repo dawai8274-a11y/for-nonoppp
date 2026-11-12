@@ -1,19 +1,23 @@
 "use client";
 
-import { Music2, VolumeX } from "lucide-react";
+import { Music2, Play } from "lucide-react";
 import { useAudio } from "@/hooks/useAudio";
 
 export default function MusicPlayer() {
-  const { enabled, toggle } = useAudio();
+  const { playing, togglePlay } = useAudio();
   return (
     <button
       type="button"
-      className="music-toggle"
-      onClick={toggle}
-      aria-label={enabled ? "Matikan musik" : "Putar musik"}
+      className={`music-toggle ${playing ? "is-playing" : "is-paused"}`}
+      onClick={togglePlay}
+      aria-label={playing ? "Jeda musik" : "Putar musik"}
     >
-      {enabled ? <Music2 size={13} /> : <VolumeX size={13} />}
-      <span>{enabled ? "Musik" : "Lagu"}</span>
+      {playing ? (
+        <Music2 size={13} className="spin-slow" />
+      ) : (
+        <Play size={12} fill="currentColor" />
+      )}
+      <span>{playing ? "Lagu Diputar ♫" : "Putar Musik"}</span>
     </button>
   );
 }

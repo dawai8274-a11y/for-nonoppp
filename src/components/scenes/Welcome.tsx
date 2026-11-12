@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { motion } from "motion/react";
+import { useAudio } from "@/hooks/useAudio";
 import type { SheetId } from "@/data/memories";
 import {
   DoodleCamera,
@@ -28,6 +29,7 @@ type WelcomeProps = {
 };
 
 export default function Welcome({ onNavigate }: WelcomeProps) {
+  const { play, playing } = useAudio();
   const [message, setMessage] = useState(
     "Ketuk karakter lucunya buat lihat reaksinya ~"
   );
@@ -81,6 +83,7 @@ export default function Welcome({ onNavigate }: WelcomeProps) {
           <div className="canvas-wrap">
             <NailongWorld
               onReact={(clipName) => {
+                if (!playing) play();
                 const reactions: Record<string, string> = {
                   Wave: "Halo Nonoppp! Salam manis penuh cinta dari aku ~",
                   Jump: "Yeay! Ikut senang merayakan 1 tahun kebersamaan kita!",
@@ -104,7 +107,10 @@ export default function Welcome({ onNavigate }: WelcomeProps) {
               <button
                 type="button"
                 className="primary-button with-icon"
-                onClick={() => setShowChoices(true)}
+                onClick={() => {
+                  setShowChoices(true);
+                  if (!playing) play();
+                }}
               >
                 <DoodleHeart size={18} />
                 <span>Buka Kejutan Ulang Tahunmu</span>

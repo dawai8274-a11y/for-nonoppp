@@ -30,7 +30,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolumeState] = useState(0.5);
+  const [volume, setVolumeState] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
   const soundRef = useRef<Howl | null>(null);
   const timerRef = useRef<number | null>(null);
@@ -39,17 +39,29 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     if (!soundRef.current) {
       soundRef.current = new Howl({
         src: [
-          "/audio/videoplayback.webm",
-          "/audio/background.webm",
-          "/audio/background.mp3"
+          "/audio/song.mp3",
+          "/audio/background.mp3",
+          "/audio/background.webm"
         ],
-        format: ["webm", "mp3"],
+        format: ["mp3", "webm"],
         loop: true,
-        volume: volume,
+        volume: 0.8,
         html5: true,
+        preload: true,
         onload: () => {
           if (soundRef.current) {
             setDuration(soundRef.current.duration() || 0);
+          }
+        },
+        onloaderror: (_id, err) => {
+          console.error("Howler load error:", err);
+        },
+        onplayerror: (_id, err) => {
+          console.warn("Howler play error (awaiting user gesture):", err);
+          if (soundRef.current) {
+            soundRef.current.once("unlock", () => {
+              soundRef.current?.play();
+            });
           }
         },
         onplay: () => {
@@ -63,14 +75,39 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           setCurrentTime(0);
         },
         onend: () => {
-          // loop handles it, but just in case
+          // loop handles it
         }
       });
     }
     return soundRef.current;
-  }, [volume]);
+  }, []);
 
-  // Keep track of current seek time for progress bar
+  // Auto-play audio upon first user gesture (touch, click, pointerdown)
+  useEffect(() => {
+    let triggered = false;
+    const handleFirstGesture = () => {
+      if (triggered) return;
+      triggered = true;
+      try {
+        const sound = initAudio();
+        if (!sound.playing()) {
+          sound.play();
+        }
+      } catch (err) {
+        console.warn("First gesture audio start:", err);
+      }
+    };
+
+    window.addEventListener("pointerdown", handleFirstGesture, { once: true });
+    window.addEventListener("touchstart", handleFirstGesture, { once: true, passive: true });
+    window.addEventListener("click", handleFirstGesture, { once: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", handleFirstGesture);
+      window.removeEventListener("touchstart", handleFirstGesture);
+      window.removeEventListener("click", handleFirstGesture);
+    };
+  }, [initAudio]);
   useEffect(() => {
     if (playing) {
       timerRef.current = window.setInterval(() => {
